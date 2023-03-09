@@ -3,24 +3,42 @@ const usersRouter = require('express').Router()
 const User = require('../models/User')
 
 usersRouter.get('/', async (request, response) => {
-	response.send('hello world')
+	const users = await User.find({})
+	response.json(users)
 })
 
 // create/register a user with input username, input password, email
 usersRouter.post('/', async (request, response) => {
-	const { userName, email, password1, password2 } = request.body
+	const { userName, email, firstName, lastName, password1, password2 } = request.body
 
 	if (!(password1 === password2)) {
-		response.status(400).send('Passwords do not match, please retype')
+		return response.status(401).json({
+			error: 'Passwords do not match, please retype'
+		})
 	}
 
-    // TODO: add validation to return an error response when the email already exists or the username already exists
+	// validation to return an error response when the email already exists or the username already exists
+	const checkUserName = await User.findOne({ userName: userName })
+	if(checkUserName){
+		return response.status(400).json({
+			error: 'This username is already in use. Please come up with a different username.'
+		})
+	}
+	const checkUserEmail = await User.findOne({ email: email })
+	if(checkUserEmail){
+		return response.status(400).json({
+			error: 'This email is already in use. Please use a different email.'
+		})
+	}
 
 	const saltRounds = 10
 	const passwordHash = await bcrypt.hash(password1, saltRounds)
 
+	// save the user to the database
 	const user = new User({
 		userName: userName,
+		firstName: firstName,
+		lastName: lastName,
 		passwordHash: passwordHash,
 		email: email
 	})
