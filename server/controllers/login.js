@@ -6,11 +6,10 @@ const User = require('../models/User')
 
 // post request to login a user
 loginRouter.post('/', async (request, response) => {
-	const { username, password } = request.body
 
+	const { userName, password } = request.body
 	// try to find the user by username
-	const user = await User.findOne({ username })
-
+	const user = await User.findOne({ userName: userName })
 	// compare the password with the hashed password
 	const passwordCorrect = user === null
 		? false
@@ -28,8 +27,12 @@ loginRouter.post('/', async (request, response) => {
 		id: user._id,
 	}
 
-	// create a token and send it in the response
-	const token = jwt.sign(userForToken, process.env.SECRET)
+	// create a token and send it in the response. expires in 3600 seconds, that is, in one hour
+	const token = jwt.sign(
+		userForToken,
+		process.env.SECRET,
+		{ expiresIn: 3600 }
+	)
 
 	response.status(200).send({ token, username: user.userName, email: user.email })
 })
