@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 const loginRouter = require('express').Router()
 const User = require('../models/User')
 
+// Todo: need another route to implement logging out a user
 
 // post request to login a user
 loginRouter.post('/', async (request, response) => {

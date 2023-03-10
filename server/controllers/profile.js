@@ -13,14 +13,20 @@ const getTokenFrom = request => {
 }
 
 // get request to retrieve a user's information and return it as a response
-profileRouter.post('/', async (request, response) => {
-	const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
-	if (!decodedToken.id) {
-		return response.status(401).json({ error: 'token invalid' })
+// can only retrieve the info if the user has a JWT
+profileRouter.get('/', async (request, response, next) => {
+	// JSONWebToken error will get thrown here if there is no JWT
+	try {
+		const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+		if (!decodedToken.id) {
+			return response.status(401).json({ error: 'token invalid' })
+		}
+		const user = await User.findById(decodedToken.id)
+		response.json({ username: user.userName, email: user.email })
 	}
-	const user = await User.findById(decodedToken.id)
-
-	response.json({ username: user.userName, email: user.email })
+	catch (error) {
+		next(error)
+	}
 })
 
 module.exports = profileRouter
