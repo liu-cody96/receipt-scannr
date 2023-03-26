@@ -7,7 +7,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import {TagUserInput} from './TagUserInput';
 
 
 export const ReceiptData = (props) => {
@@ -25,7 +24,6 @@ export const ReceiptData = (props) => {
             <TableRow>
                 <TableCell align="left">Details</TableCell>
                 <TableCell align="left">Price</TableCell>
-                <TableCell align="left" colSpan={2}>Add Users</TableCell>
             </TableRow>
             </TableHead>
             <TableBody>
@@ -33,19 +31,16 @@ export const ReceiptData = (props) => {
                 <TableRow key={row.description}>
                 <TableCell>{row.description}</TableCell>
                 <TableCell align="left">{row.amount}</TableCell>
-                <TableCell><TagUserInput itemName = {row.description} rowAmount = {row.amount} userCost = {userCost} setUserCost = {setUserCost}></TagUserInput></TableCell>
                 </TableRow>
             ))}
             
             <TableRow>
                 <TableCell colSpan={1}>Tip</TableCell>
                 <TableCell align="left">{props.data["tip"] === null ? 0.00 : props.data["tip"]}</TableCell>
-                <TableCell><TagUserInput/></TableCell>
             </TableRow>
             <TableRow>
                 <TableCell colSpan={1}>Tax</TableCell>
                 <TableCell align="left">{props.data["tax"]}</TableCell>
-                <TableCell><TagUserInput/></TableCell>
             </TableRow>
             <TableRow>
                 <TableCell colSpan={1}>Total</TableCell>

@@ -4,8 +4,8 @@ export const Header = (props) => {
 
   const logMeOut = () => {
     axios({
-      method: "POST",
-      url:"http://localhost:8000/user/logout",
+      method: "PUT",
+      url:"http://localhost:8000/api/profile/logout",
     })
     .then((response) => {
        props.token()

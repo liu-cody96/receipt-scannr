@@ -3,21 +3,21 @@ import axios from "axios";
 
 export const Login = (props) => {
     const [loginForm, setloginForm] = useState({
-      email: "",
+      userName: "",
       password: ""
     })
 
     const logMeIn = (event) => {
       axios({
         method: "POST",
-        url:"http://localhost:8000/user/token",
+        url:"http://localhost:8000/api/login",
         data:{
-          email: loginForm.email,
+          userName: loginForm.userName,
           password: loginForm.password
          }
       })
       .then((response) => {
-        props.setToken(response.data.access_token)
+        props.setToken(response.data.token)
         props.setProfileData(response.data.username)
       }).catch((error) => {
         if (error.response) {
@@ -28,7 +28,7 @@ export const Login = (props) => {
       })
 
       setloginForm(({
-        email: "",
+        userName: "",
         password: ""}))
 
       event.preventDefault()
@@ -44,7 +44,7 @@ export const Login = (props) => {
       <div>
         <h1>Login</h1>
           <form className="login">
-            <input onChange={handleChange} type="email" text={loginForm.email} name="email" placeholder="Email" value={loginForm.email} />
+            <input onChange={handleChange} type="username" text={loginForm.userName} name="userName" placeholder="Username" value={loginForm.userName} />
             <input onChange={handleChange} type="password" text={loginForm.password} name="password" placeholder="Password" value={loginForm.password} />
           <button onClick={logMeIn}>Submit</button>
         </form>
