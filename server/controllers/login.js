@@ -3,7 +3,10 @@ const bcrypt = require('bcrypt')
 const loginRouter = require('express').Router()
 const User = require('../models/User')
 
-// Todo: need another route to implement logging out a user
+// display the title lol
+loginRouter.get('/title', async (request, response) => {
+	response.status(200).send('Welcome To ReceiptScannR')
+})
 
 // post request to login a user
 loginRouter.post('/', async (request, response) => {
@@ -35,7 +38,7 @@ loginRouter.post('/', async (request, response) => {
 		{ expiresIn: 3600 }
 	)
 
-	response.status(200).send({ token, username: user.userName, email: user.email })
+	response.status(200).send({ token: token, username: user.userName, email: user.email })
 })
 
 module.exports = loginRouter
